@@ -1,6 +1,8 @@
 # redux-sveltify
 
-Simple tool for merge functionality from a full-featured Redux store, like Devtools, with Svelte's native stores.
+[<img src="https://img.shields.io/npm/v/redux-sveltify">](https://www.npmjs.com/package/redux-sveltify)
+
+Simple tool for merge functionality of a full-featured Redux store with Svelte's native stores.
 
 ## Usage
 

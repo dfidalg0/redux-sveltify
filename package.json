@@ -1,7 +1,7 @@
 {
   "name": "redux-sveltify",
-  "version": "1.0.1",
-  "description": "Create Svelte stores the full power of Redux",
+  "version": "1.0.2",
+  "description": "Create Svelte stores with the full power of Redux",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -11,7 +11,12 @@
     "type": "git",
     "url": "git+https://github.com/diegood12/redux-sveltify.git"
   },
-  "keywords": [],
+  "keywords": [
+    "svelte",
+    "redux",
+    "store",
+    "state management"
+  ],
   "author": "",
   "license": "MIT",
   "bugs": {
