@@ -1,6 +1,6 @@
 {
   "name": "redux-sveltify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create Svelte stores the full power of Redux",
   "main": "index.js",
   "type": "module",
