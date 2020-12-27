@@ -1,0 +1,25 @@
+{
+  "name": "redux-sveltify",
+  "version": "1.0.0",
+  "description": "Create Svelte stores the full power of Redux",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegood12/redux-sveltify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/diegood12/redux-sveltify/issues"
+  },
+  "homepage": "https://github.com/diegood12/redux-sveltify#readme",
+  "devDependencies": {
+    "redux": "^4.0.5",
+    "svelte": "^3.31.0"
+  }
+}
