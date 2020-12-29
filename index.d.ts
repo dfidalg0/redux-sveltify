@@ -1,17 +1,23 @@
 declare module 'redux-sveltify' {
-    import { Store, Action, AnyAction } from 'redux';
+    import { Store, Action, AnyAction, Dispatch } from 'redux';
 
     type Unsubscribe = () => void;
 
-    type ActionCreatorsMapper <T extends Record<string, (...args: any) => any>> = {
-        [K in keyof T]: (...args: Parameters<T[K]>) => ReturnType<T[K]>
+    type ActionCreatorsMapper <
+        T extends Record<string, (...args: any) => any>
+    > = {
+        [K in keyof T]: (...args: Parameters<T[K]>) =>
+            ReturnType<T[K]> extends (...args: any) => any ?
+                ReturnType<ReturnType<T[K]>> :
+                ReturnType<T[K]>;
     };
 
     export type SvelteReduxStore <
         S, // State
         A extends Action<any> = AnyAction, // Action
-        C extends Record<string, (...args: any) => A> = {} // Action Creators
-    > = Omit<Store<S,A>, 'subscribe'> & ActionCreatorsMapper<C> & {
+        C extends Record<string, (...args: any) => Parameters<D>[0]> = {}, // Action Creators
+        D extends (...args: any) => any = Dispatch<A>, // Dispatcher
+    > = Omit<Store<S,A>, 'subscribe'> & { dispatch: D } & ActionCreatorsMapper<C> & {
         /**
          * ADAPTED FROM THE REDUX DOCS
          *
@@ -47,6 +53,9 @@ declare module 'redux-sveltify' {
     * middlewares, combined reducers, etc..
     */
     export default function sveltify <
-        S, A extends Action<any> = AnyAction, C extends Record<string, (...args: any) => A> = {}
-    > (reduxStore: Store<S, A>, actionCreators?: C): SvelteReduxStore<S,A,C>;
+        S,
+        A extends Action<any> = AnyAction,
+        C extends Record<string, (...args: any) => A | Parameters<D>[0]> = {},
+        D extends (...args: any) => any = Dispatch<A>
+    > (reduxStore: Store<S, A> & { dispatch: D }, actionCreators?: C): SvelteReduxStore<S,A,C,D>;
 }

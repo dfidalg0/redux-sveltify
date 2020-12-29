@@ -15,10 +15,11 @@ import sveltify from 'redux-sveltify';
 import { createStore } from 'redux';
 
 // Redux Store definition
-const store = createStore((count = 0, { type, payload }) => {
+const store = createStore((state = 0, { type, payload }) => {
     switch(type){
       case 'INCREMENT': return state + payload;
       case 'DECREMENT': return state - payload;
+      case 'RESET': return 0;
       default: return state;
     }
 });
@@ -44,13 +45,72 @@ export default sveltify(store, { increment, decrement });
     }, 2000);
 </script>
 
-<!-- Or you can call your actions like you would do in a native Svelte store -->
+<!--
+    Or you can call your actions like you would do in
+    a native Svelte store
+-->
 <button on:click={counter.decrement(1)}> - </button>
-<!-- You can subscribe to the store the Svelte way -->
-{$counter}
 <button on:click={counter.increment(1)}> + </button>
+
+<!-- You can also subscribe to the store the Svelte way -->
+<div> {$counter} </div>
 ```
 
 ## Typescript Support
 
 This package has full Typescript support. All you have to do is type your Redux Store like you would do normally and everything will be properly typed after that.
+
+### Redux Thunk
+
+(Since 1.0.3) This package has typing support for Redux Thunk too! You only need to properly type your Redux store with Thunk like bellow
+
+```typescript
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import sveltify from 'redux-sveltify';
+
+// Thunk typings
+import { ThunkMiddleware, ThunkDispatch } from 'redux-thunk';
+
+// Definition of the recurrent types
+type State = number;
+type Action = {
+    type: 'INCREMENT' | 'DECREMENT';
+    payload: number;
+};
+type ThunkExtraParam = never;
+
+type Thunk = ThunkMiddleware<State, Action, ThunkExtraParam>;
+type Dispatch = ThunkDispatch<State, ThunkExtraParam, Action>;
+
+// Definition of the store
+const reduxStore = createStore(
+    (state: State = 0, { type, payload }: Action) => {
+        switch (type) {
+          case 'INCREMENT': return state + payload;
+          case 'DECREMENT': return state - payload;
+          default: return state;
+        }
+    },
+    null,
+    // Typing thunk middleware
+    applyMiddleware(thunk as Thunk)
+);
+
+// Base action creators
+const increment = (payload: number) => ({ type: 'INCREMENT', payload }) as const;
+
+// Thunk action creator
+const incrementWithDelay = (payload: number, timeout = 0) =>
+    async (dispatch: Dispatch) => {
+        await new Promise(resolve => setTimeout(resolve, timeout));
+        dispatch(increment(payload));
+    }
+
+// Sveltification of the Redux store
+const svelteStore = sveltify(reduxStore, { incrementWithDelay });
+
+const promise = svelteStore.incrementWithDelay(10, 1000);
+
+promise; // Typed as Promise<void>
+```

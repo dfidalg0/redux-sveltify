@@ -1,6 +1,6 @@
 {
   "name": "redux-sveltify",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Create Svelte stores with the full power of Redux",
   "main": "index.js",
   "type": "module",
